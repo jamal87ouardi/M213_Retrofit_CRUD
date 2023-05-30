@@ -45,18 +45,9 @@ public class UpdateDelete extends AppCompatActivity {
                 String movie_Name = name.getText().toString();
                 String movie_img = url.getText().toString();
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://13.48.3.250/RestAPi_Movie/")
-                        // as we are sending data in json format so
-                        // we have to add Gson converter factory
-                        .addConverterFactory(GsonConverterFactory.create())
-                        // at last we are building our retrofit builder.
-                        .build();
-                // below line is to create an instance for our retrofit api class.
-                MovieApi retrofitAPI = retrofit.create(MovieApi.class);
 
-
-                Call<Movie> call = retrofitAPI.updateMovie(movie_ID,movie_Name,movie_img);
+                RemoteAPI remoteAPI = new RemoteAPI();
+                Call<Movie> call = remoteAPI.getRetrofit().updateMovie(movie_ID,movie_Name,movie_img);
 
                 call.enqueue(new Callback<Movie>() {
                     @Override
@@ -74,6 +65,28 @@ public class UpdateDelete extends AppCompatActivity {
             }
         });
 
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                RemoteAPI remoteAPI = new RemoteAPI();
+                Call<Movie> call = remoteAPI.getRetrofit().deleteMovie(movie_ID);
+
+                call.enqueue(new Callback<Movie>() {
+                    @Override
+                    public void onResponse(Call<Movie> call, Response<Movie> response) {
+                        Toast.makeText(UpdateDelete.this, "Movie Deleted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Movie> call, Throwable t) {
+                        Toast.makeText(UpdateDelete.this, "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
 
     }
 

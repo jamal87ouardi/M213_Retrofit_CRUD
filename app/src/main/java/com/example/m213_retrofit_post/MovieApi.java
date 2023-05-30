@@ -30,4 +30,11 @@ public interface MovieApi {
             @Field("image") String image
     );
 
+    @FormUrlEncoded
+    @POST("delete.php")
+    Call<Movie> deleteMovie(
+            @Field("id") int id
+
+    );
+
 }
